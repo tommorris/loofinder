@@ -5,7 +5,8 @@ app = Flask(__name__)
 
 @app.route("/")
 def hello():
-    return "Hello World!"
+    html_page = open('index.html').read()
+    return Response(html_page, mimetype="text/html")
 
 @app.route("/search", methods=['GET'])
 def find():
