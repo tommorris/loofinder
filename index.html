@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Loofinder test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+    <!-- Nice markers with different colours and icons, see https://github.com/lvoogdt/Leaflet.awesome-markers -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+    <style>
+      body {
+      padding: 0;
+      margin: 0;
+      }
+      
+      html, body, #map {
+      height: 100%;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div id="map"></div>
+    
+    <script>
+      var map = L.map('map');
+      L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+      '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+      id: 'examples.map-i875mjb7'
+      }).addTo(map);
+      
+      function onLocationFound(e) {
+      var radius = e.accuracy / 2;
+
+      //L.marker(e.latlng).addTo(map).bindPopup("You are within " + radius + " meters from this point").openPopup();
+      L.circle(e.latlng, radius).addTo(map);
+      }
+
+      function onLocationError(e) {
+      alert(e.message);
+      }
+
+      map.on('locationfound', onLocationFound);
+      map.on('locationerror', onLocationError);
+      map.locate({setView: true, maxZoom: 16});
+
+      // Set the proper prefix for FontAwesome
+      L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
+
+      // Create custom markers
+      var redMarker = L.AwesomeMarkers.icon({
+      icon: 'thumbs-down',
+      markerColor: 'red'
+      });
+      var greenMarker = L.AwesomeMarkers.icon({
+      icon: 'thumbs-up',
+      markerColor: 'green'
+      });
+      var grayMarker = L.AwesomeMarkers.icon({
+      icon: 'question-circle',
+      markerColor: 'gray'
+      });
+
+      // Display the markers
+      L.marker([51.53, -0.11], {icon: redMarker}).addTo(map);
+      L.marker([51.532, -0.105], {icon: greenMarker}).addTo(map);
+      L.marker([51.53, -0.10], {icon: grayMarker}).addTo(map);
+    </script>
+  </body>
+</html>
+
