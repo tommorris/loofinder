@@ -3,6 +3,9 @@ import requests
 import json
 app = Flask(__name__)
 
+
+RANDOM_MODE = False
+
 @app.route("/")
 def hello():
     html_page = open('index.html').read()
@@ -39,17 +42,29 @@ def find():
     for way in ways: out['features'].append(way)
     return Response(response=json.dumps(out), status=200, mimetype="application/json")
 
+def random_choice():
+    import random
+    return random.choice([True, False, None])
+
 def node_to_gj(node):
     out = { "type": "Feature",
             "geometry": {
                 "type": "Point",
-                "coordinates": [node[u'lat'], node[u'lon']]
+                "coordinates": [node[u'lon'], node[u'lat']]
             },
             "properties": {}
         }
     out['properties']['tags'] = node[u'tags']
     if u'name' in node[u'tags'].keys():
         out['properties']['name'] = node[u'tags'][u'name']
+    if u'unisex' in node[u'tags'].keys():
+        if node[u'tags'][u'unisex'] == u'yes':
+            out['properties'][u'unisex'] = True
+        elif node[u'tags'][u'unisex'] == u'no':
+            out['properties'][u'unisex'] = True
+    if RANDOM_MODE is True:
+        out['properties'][u'unisex'] = random_choice()
+
     out['osm_node_id'] = node[u'id']
     return out
 
@@ -60,10 +75,13 @@ def annotated_way_to_gj(way):
     out['properties']['tags'] = way['way']['tags']
     if 'name' in way['way']['tags'].keys():
         out['properties']['name'] = way['way']['tags']['name']
-    if 'unisex' in way['way']['tags'].keys() and way['way']['tags']['unisex'] == True:
+    if 'unisex' in way['way']['tags'].keys() and way['way']['tags']['unisex'] == u'yes':
         out['properties']['unisex'] = True
-    elif 'unisex' in way['way']['tags'].keys() and way['way']['tags']['unisex'] == False:
-        out['properties']['unisex'] = True
+    elif 'unisex' in way['way']['tags'].keys() and way['way']['tags']['unisex'] == u'no':
+        out['properties']['unisex'] = False
+    if RANDOM_MODE is True:
+        out['properties'][u'unisex'] = random_choice()
+
 
     if way['nodes'][0] == way['nodes'][-1]:
         # closed way
