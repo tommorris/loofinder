@@ -98,8 +98,21 @@
         };
 
     getJSON('/search', function(data) {
-      
-      var myLayer = L.geoJson(data).addTo(map);
+      var myLayer = L.geoJson(data,
+        {
+            pointToLayer: function(feature, latlng) {
+                var chosen_col = grayMarker;
+                if (feature.properties.unisex == true) {
+                    var chosen_col = greenMarker;
+                }
+                if (feature.properties.unisex == false) {
+                    var chosen_col = redMarker;
+                }
+                return L.marker(latlng, {icon: chosen_col});
+            },
+        }
+      ).addTo(map);
+
     });
     </script>
   </body>
