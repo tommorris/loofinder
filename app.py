@@ -67,7 +67,7 @@ def annotated_way_to_gj(way):
 
     if way['nodes'][0] == way['nodes'][-1]:
         # closed way
-        list = [[x['lat'], x['lon']] for x in way['nodes']]
+        list = [[x['lon'], x['lat']] for x in way['nodes']]
         geometry = {"type": "Polygon",
                     "coordinates": [ list ]}
         out['geometry'] = geometry
