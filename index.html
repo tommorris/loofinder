@@ -30,12 +30,17 @@
     
     <script>
       var map = L.map('map');
-      L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+
+    if (window.devicePixelRatio > 1) {
+        var infix = "lr";
+      } else {
+        var infix = "ls";
+      }
+      var tileurl = 'http://tiles.lyrk.org/' + infix + '/{z}/{x}/{y}?apikey=c6e69d73e27c4b94b9e5722d701046db';
+      var osmAttrib='Map data © OpenStreetMap contributors';
+      L.tileLayer(tileurl, {
       maxZoom: 18,
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-      '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-      'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-      id: 'examples.map-i875mjb7'
+      attribution: osmAttrib
       }).addTo(map);
       
       function onLocationFound(e) {
@@ -69,11 +74,6 @@
       icon: 'question-circle',
       markerColor: 'gray'
       });
-
-      // Display the markers
-      //L.marker([51.53, -0.11], {icon: redMarker}).addTo(map);
-      //L.marker([51.532, -0.105], {icon: greenMarker}).addTo(map);
-      //L.marker([51.53, -0.10], {icon: grayMarker}).addTo(map);
 
     var getJSON = function(url, successHandler, errorHandler) {
         var xhr = typeof XMLHttpRequest != 'undefined'
