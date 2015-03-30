@@ -22,6 +22,23 @@
       html, body, #map {
       height: 100%;
       }
+
+      .legend {
+        background-color: #fff;
+        padding: 3px;
+        line-height: 18px;
+        color: #555;
+      }
+      .legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+      }
+      .legend > i {
+        padding-left: 2px;
+      }
     </style>
   </head>
   
@@ -97,6 +114,24 @@
           };
           xhr.send();
         };
+    var legend = L.control({position: 'topright'});
+    legend.onAdd = function (map) {
+      var div = L.DomUtil.create('div', 'info legend');
+      div.innerHTML +=
+            '<h1>Loofinder</h1>' +
+            '<a href="https://github.com/tommorris/loofinder">About</a>' +
+            '<table>' +
+            '<tr><td><i class="fa fa-question-circle" style="background-color: #575757; color:#fff;"></i></td>' +
+            '<td>Unknown</td></tr>' +
+            '<tr><td><i class="fa fa-thumbs-up" style="color: #fff; background-color: #76B212"></i></div></td>' +
+            '<td>Unisex</td></tr>' +
+            '<tr><td><i class="fa fa-thumbs-down" style="color: #fff; background-color: #D73D20"></i></td>' +
+            '<td>Not unisex</td></tr>' +
+            '</table>';
+      return div;
+    };
+
+    legend.addTo(map);
 
     getJSON('/search', function(data) {
       var myLayer = L.geoJson(data,
