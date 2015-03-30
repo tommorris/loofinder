@@ -61,7 +61,7 @@ def node_to_gj(node):
         if node[u'tags'][u'unisex'] == u'yes':
             out['properties'][u'unisex'] = True
         elif node[u'tags'][u'unisex'] == u'no':
-            out['properties'][u'unisex'] = True
+            out['properties'][u'unisex'] = False
     if RANDOM_MODE is True:
         out['properties'][u'unisex'] = random_choice()
 
