@@ -1,5 +1,6 @@
 from flask import Flask, Response, request
 import requests
+import operator
 import json
 app = Flask(__name__)
 
@@ -30,8 +31,6 @@ def find():
     for x in supporting_nodes:
         supporting_nodes_hash[x[u'id']] = x
     ways = [x for x in data[u'elements'] if x[u'type'] == u'way']
-    #print ways
-    #import pdb; pdb.set_trace()
     ways = [{"way": x, "nodes": [supporting_nodes_hash[y] for y in x[u'nodes']]} for x in ways]
     ways = [annotated_way_to_gj(x) for x in ways]
     out = {
@@ -85,9 +84,13 @@ def annotated_way_to_gj(way):
 
     if way['nodes'][0] == way['nodes'][-1]:
         # closed way
-        list = [[x['lon'], x['lat']] for x in way['nodes']]
-        geometry = {"type": "Polygon",
-                    "coordinates": [ list ]}
+        lons = [x['lon'] for x in way['nodes']]
+        lats = [x['lat'] for x in way['nodes']]
+        lon_avg = float(reduce(operator.add, lons)) / float(len(lons))
+        lat_avg = float(reduce(operator.add, lats)) / float(len(lats))
+        #list = [[x['lon'], x['lat']] for x in way['nodes']]
+        geometry = {"type": "Point",
+                    "coordinates": [ lon_avg, lat_avg ]}
         out['geometry'] = geometry
         return out
     else:
