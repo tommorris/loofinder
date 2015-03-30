@@ -7,7 +7,7 @@ app = Flask(__name__)
 RANDOM_MODE = False
 
 @app.route("/")
-def hello():
+def index():
     html_page = open('index.html').read()
     return Response(html_page, mimetype="text/html")
 
