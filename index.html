@@ -32,16 +32,17 @@
       var map = L.map('map');
 
     if (window.devicePixelRatio > 1) {
-        var infix = "lr";
+        var infix = "@2x";
       } else {
-        var infix = "ls";
+        var infix = "";
       }
-      var tileurl = 'http://tiles.lyrk.org/' + infix + '/{z}/{x}/{y}?apikey=c6e69d73e27c4b94b9e5722d701046db';
-      var osmAttrib='Map data © OpenStreetMap contributors';
+      var tileurl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}' + infix + '.png';
+      var osmAttrib='Map data © OpenStreetMap contributors, Tiles © CartoDB';
       L.tileLayer(tileurl, {
       maxZoom: 18,
       attribution: osmAttrib
       }).addTo(map);
+      map.setView([51.505, -0.09], 14);
       
       function onLocationFound(e) {
       var radius = e.accuracy / 2;
